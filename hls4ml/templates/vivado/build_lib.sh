@@ -3,7 +3,7 @@
 CC=g++
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     #CFLAGS="-O3 -fPIC -std=c++11 -fno-gnu-unique"
-    CFLAGS="-O0 -fPIC -std=c++11 -fno-gnu-unique"
+    CFLAGS="-O0 -g -fPIC -std=c++11 -fno-gnu-unique"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     CFLAGS="-O3 -fPIC -std=c++11"
 fi
