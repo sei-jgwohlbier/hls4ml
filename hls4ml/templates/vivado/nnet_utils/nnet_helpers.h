@@ -44,6 +44,12 @@ template <class T, size_t SIZE> void load_weights_from_txt(T *w, const char *fna
             std::cerr << "ERROR: Expected " << SIZE << " values";
             std::cerr << " but read only " << i << " values" << std::endl;
         }
+
+        // jgw
+        std::cerr << "weight file: " << fname << std::endl;
+        for (size_t j=0; j<SIZE;j++) {
+            std::cerr << w[j] << std::endl;
+	}
     }
 }
 
