@@ -21,7 +21,7 @@ namespace nnet {
 
 template <class T, size_t SIZE> void load_weights_from_txt(T *w, const char *fname) {
 
-    std::cerr << "CHECK VALUE OF WEIGHTS_DIR!!\n";
+    std::cerr << "\nCHECK VALUE OF WEIGHTS_DIR!!\n";
 
     std::string full_path = std::string(WEIGHTS_DIR) + "/" + std::string(fname);
     std::ifstream infile(full_path.c_str(), std::ios::binary);
