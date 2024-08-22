@@ -16,7 +16,7 @@ namespace nnet {
 #ifndef __SYNTHESIS__
 
 #ifndef WEIGHTS_DIR
-#define WEIGHTS_DIR "/home/hls4ml-user/work/ewstapp_research/isolate/NETWORK/hls4mlprj_block_Vivado_io_stream/firmware/weights"
+#define WEIGHTS_DIR "/home/hls4ml-user/work/ewstapp_research/isolate/NETWORK/hls4mlprj_resnet_Vivado_io_stream/firmware/weights"
 #endif
 
 template <class T, size_t SIZE> void load_weights_from_txt(T *w, const char *fname) {
