@@ -49,7 +49,8 @@ template <class T, size_t SIZE> void load_weights_from_txt(T *w, const char *fna
 
         // jgw
         std::cerr << "weight file: " << fname << std::endl;
-        size_t len = std::min(10,SIZE);
+        size_t ten = 10;
+        size_t len = std::min(ten,SIZE);
         for (size_t j=0; j<len;j++) {
             std::cerr << w[j] << std::endl;
 	}
