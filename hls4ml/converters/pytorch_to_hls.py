@@ -159,6 +159,27 @@ def parse_pytorch_model(config, verbose=True):
 
     n_inputs = 0
 
+   # check for constant nodes
+    merge_layers = ['add','mul','sub','fmin','fmax']
+    i=0 # count number of consts and use it in the name
+    for node in traced_model.graph.nodes:
+        if node.name in merge_layers:
+            for arg in node.args:
+                if np.isscalar(arg):
+                    # add an input node with the constant value
+                    new_node = traced_model.graph.placeholder(
+                        name='const_'+str(i),
+                        type_expr=torch.Tensor,
+                        default_value=arg
+                    )
+                    node.prepend(new_node)
+                    node.update_arg(1,new_node)
+                    i += 1
+
+    print(traced_model.graph)
+    #import pdb; breakpoint()
+    traced_model.graph.lint()
+
     for node in traced_model.graph.nodes:
         if node.op == 'call_module':
             # modules that are part of a torch.nn.Sequential with name 'name' have target names 'name.x',
@@ -249,12 +270,25 @@ def parse_pytorch_model(config, verbose=True):
 
             input_layer = {}
             input_layer['name'] = node.name
-            input_layer['class_name'] = 'InputLayer'
-            input_layer['input_shape'] = list(input_shapes[n_inputs][1:])
-            layer_list.insert(n_inputs, input_layer)
 
-            output_shapes[input_layer['name']] = list(input_shapes[n_inputs])
-            input_layers.append(input_layer['name'])
+            if 'const' in node.name:
+                input_layer['class_name'] = 'ConstantLayer'
+                # get input shape by looking at input to next node
+                shape = list(output_shapes[node.next.args[0].name])
+                input_layer['input_shape'] = shape
+                layer_list.insert(n_inputs, input_layer)
+                # also set to output shape
+                output_shapes[input_layer['name']] = shape
+                input_layers.append(input_layer['name'])
+            else:
+                input_layer['class_name'] = 'InputLayer'
+                input_layer['input_shape'] = list(input_shapes[n_inputs][1:])
+                layer_list.insert(n_inputs, input_layer)
+
+                output_shapes[input_layer['name']] = list(input_shapes[n_inputs])
+                input_layers.append(input_layer['name'])
+
+
             n_inputs += 1
 
             layer_counter += 1

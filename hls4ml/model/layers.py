@@ -1434,6 +1434,7 @@ class SymbolicExpression(Layer):
 layer_map = {
     'Input': Input,
     'InputLayer': Input,
+    'ConstantLayer' : Constant,
     'Activation': Activation,
     'QActivation': Activation,
     'LeakyReLU': ParametrizedActivation,
