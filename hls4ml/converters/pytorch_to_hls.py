@@ -279,15 +279,16 @@ def parse_pytorch_model(config, verbose=True):
                 layer_list.insert(n_inputs, input_layer)
                 # also set to output shape
                 output_shapes[input_layer['name']] = shape
-                input_layers.append(input_layer['name'])
+                #layer, output_shape = layer_handlers['Constant'](
+                #    node, reader, config
+                #)
             else:
                 input_layer['class_name'] = 'InputLayer'
                 input_layer['input_shape'] = list(input_shapes[n_inputs][1:])
                 layer_list.insert(n_inputs, input_layer)
 
                 output_shapes[input_layer['name']] = list(input_shapes[n_inputs])
-                input_layers.append(input_layer['name'])
-
+            input_layers.append(input_layer['name'])
 
             n_inputs += 1
 
@@ -396,6 +397,7 @@ def parse_pytorch_model(config, verbose=True):
             assert output_shape is not None
             output_shapes[layer['name']] = output_shape
 
+    print(input_layers)
     if len(input_layers) == 0:
         input_layers = None
 
