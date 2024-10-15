@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 
 from hls4ml.model import ModelGraph

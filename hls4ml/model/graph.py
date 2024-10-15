@@ -406,7 +406,7 @@ class ModelGraph:
             name = layer['name']
             inputs = layer.get('inputs', [])
             outputs = layer.get('outputs', [])
-            if kind in ['InputLayer', 'Input']:
+            if kind in ['InputLayer', 'Input', 'ConstantLayer']:
                 inputs = ['input']
             elif len(inputs) == 0:
                 inputs = [next(reversed(self.graph), 'input')]
