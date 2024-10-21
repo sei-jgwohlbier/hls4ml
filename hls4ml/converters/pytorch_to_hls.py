@@ -315,6 +315,8 @@ def parse_pytorch_model(config, verbose=True):
             input_layer['name'] = node.name
             input_layer['class_name'] = 'InputLayer'
             input_layer['input_shape'] = [None] + list(obj.size())
+            if 'constant' in node.name: #jgw
+                input_layer['value'] = obj
             layer_list.insert(n_inputs, input_layer)
 
             output_shapes[input_layer['name']] = [None] + list(obj.size())
