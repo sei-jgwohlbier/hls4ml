@@ -339,6 +339,19 @@ class Layer:
             precision[data_type.name] = data_type
         return precision
 
+class Constant(Layer):
+    def initialize(self):
+        shape = self.attributes['input_shape']
+#        if shape[0] is None:
+#            shape = shape[1:]
+#        dims = [f'N_INPUT_{i}_{self.index}' for i in range(1, len(shape) + 1)]
+#        if self.index == 1:
+#            default_type_name = 'input_t'
+#        else:
+#            default_type_name = f'input{self.index}_t'
+#        type_name = self.attributes.get('type_name', default_type_name)
+#        precision, _ = self.model.config.get_precision(self, var='result')
+#        self.add_output_variable(shape, dims, var_name=self.name, type_name=type_name, precision=precision)
 
 class Input(Layer):
     def initialize(self):
@@ -1434,6 +1447,7 @@ class SymbolicExpression(Layer):
 layer_map = {
     'Input': Input,
     'InputLayer': Input,
+    'ConstantLayer': Constant,
     'Activation': Activation,
     'QActivation': Activation,
     'LeakyReLU': ParametrizedActivation,
