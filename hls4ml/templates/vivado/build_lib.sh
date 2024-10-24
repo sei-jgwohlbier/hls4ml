@@ -12,7 +12,8 @@ LDFLAGS=
 INCFLAGS="-Ifirmware/ap_types/"
 PROJECT=myproject
 LIB_STAMP=mystamp
-WEIGHTS_DIR="\"weights\""
+BASEDIR="$(cd "$(dirname "$0")" && pwd)"
+WEIGHTS_DIR="\"${BASEDIR}/firmware/weights\""
 
 echo "CC=${CC}"
 echo "CFLAGS=${CFLAGS}"
