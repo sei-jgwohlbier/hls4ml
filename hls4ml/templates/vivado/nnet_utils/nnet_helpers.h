@@ -21,8 +21,6 @@ namespace nnet {
 
 template <class T, size_t SIZE> void load_weights_from_txt(T *w, const char *fname) {
 
-    std::cerr << "\nCHECK VALUE OF WEIGHTS_DIR!!\n";
-
     std::string full_path = std::string(WEIGHTS_DIR) + "/" + std::string(fname);
     std::ifstream infile(full_path.c_str(), std::ios::binary);
 
@@ -46,14 +44,6 @@ template <class T, size_t SIZE> void load_weights_from_txt(T *w, const char *fna
             std::cerr << "ERROR: Expected " << SIZE << " values";
             std::cerr << " but read only " << i << " values" << std::endl;
         }
-
-        // jgw
-        std::cerr << "weight file: " << fname << std::endl;
-        size_t ten = 10;
-        size_t len = std::min(ten,SIZE);
-        for (size_t j=0; j<len;j++) {
-            std::cerr << w[j] << std::endl;
-	}
     }
 }
 
