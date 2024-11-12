@@ -1,5 +1,5 @@
-import torch
 import numpy as np
+import torch
 
 from hls4ml.model import ModelGraph
 
@@ -160,30 +160,22 @@ def parse_pytorch_model(config, verbose=True):
 
     n_inputs = 0
 
-    print(traced_model.graph)
-
-   # check for constant nodes
-    merge_layers = ['add','mul','sub','fmin','fmax']
-    i=0 # count number of consts and use it in the name
+    # check for constant nodes
+    merge_layers = ['add', 'mul', 'sub', 'fmin', 'fmax']
+    i = 0  # count number of consts and use it in the name
     for node in traced_model.graph.nodes:
-        if node.name in merge_layers:
+        if node.name.split("_")[0] in merge_layers:
             for arg in node.args:
                 if np.isscalar(arg):
                     # add an input node with the constant value
                     new_node = traced_model.graph.placeholder(
-                        name='const_'+str(i),
-                        type_expr=torch.Tensor,
-                        default_value=arg
+                        name='const_' + str(i), type_expr=torch.Tensor, default_value=arg
                     )
                     node.prepend(new_node)
-                    node.update_arg(1,new_node)
+                    node.update_arg(1, new_node)
                     i += 1
 
-    print(traced_model.graph)
-    #import pdb; breakpoint()
     traced_model.graph.lint()
-
-
 
     for node in traced_model.graph.nodes:
         if node.op == 'call_module':
@@ -277,13 +269,13 @@ def parse_pytorch_model(config, verbose=True):
             input_layer['name'] = node.name
 
             if 'const' in node.name:
-                pytorch_class = "Constant"
-                layer, output_shape = layer_handlers[pytorch_class](pytorch_class, node.name, node)    
- 
+                pytorch_class = 'Constant'
+                layer, output_shape = layer_handlers[pytorch_class](pytorch_class, node.name, node)
+
                 layer_list.append(layer)
-                
+
                 assert output_shape is not None
-                output_shapes[layer['name']] = output_shape                
+                output_shapes[layer['name']] = output_shape
 
             else:
 
@@ -292,7 +284,7 @@ def parse_pytorch_model(config, verbose=True):
                 layer_list.insert(n_inputs, input_layer)
 
                 output_shapes[input_layer['name']] = list(input_shapes[n_inputs])
-            
+
                 input_layers.append(input_layer['name'])
                 n_inputs += 1
 
