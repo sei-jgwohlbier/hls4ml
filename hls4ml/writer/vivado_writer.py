@@ -562,7 +562,7 @@ class VivadoWriter(Writer):
                 newline = line
                 prev_size = "0"
                 for out in model_outputs:
-                    newline += indent + f'for(int i = f{prev_size}; i < {prev_size} + {out.size_cpp()}; i++) {{\n'
+                    newline += indent + f'for(int i = {prev_size}; i < {prev_size} + {out.size_cpp()}; i++) {{\n'
                     newline += indent + '  std::cout << pr[i] << " ";\n'
                     newline += indent + '}\n'
                     newline += indent + 'std::cout << std::endl;\n'
