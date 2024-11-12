@@ -560,11 +560,16 @@ class VivadoWriter(Writer):
 
             elif '// hls-fpga-machine-learning insert predictions' in line:
                 newline = line
+                prev_size = "0"
                 for out in model_outputs:
-                    newline += indent + f'for(int i = 0; i < {out.size_cpp()}; i++) {{\n'
+                    newline += indent + f'for(int i = f{prev_size}; i < {prev_size} + {out.size_cpp()}; i++) {{\n'
                     newline += indent + '  std::cout << pr[i] << " ";\n'
                     newline += indent + '}\n'
                     newline += indent + 'std::cout << std::endl;\n'
+		    if prev_size == "0":
+                        prev_size = f"{out.size_cpp()}"
+                    else:
+                        prev_size += f" + {out.size_cpp()}"
 
             elif '// hls-fpga-machine-learning insert tb-output' in line:
                 newline = line
