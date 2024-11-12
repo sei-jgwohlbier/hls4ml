@@ -566,7 +566,7 @@ class VivadoWriter(Writer):
                     newline += indent + '  std::cout << pr[i] << " ";\n'
                     newline += indent + '}\n'
                     newline += indent + 'std::cout << std::endl;\n'
-		    if prev_size == "0":
+                    if prev_size == "0":
                         prev_size = f"{out.size_cpp()}"
                     else:
                         prev_size += f" + {out.size_cpp()}"
