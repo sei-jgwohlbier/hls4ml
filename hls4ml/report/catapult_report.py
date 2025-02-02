@@ -134,14 +134,17 @@ def parse_catapult_report(output_dir):
         return
 
     # Read the YAML config file to determine the project settings
-    with open(output_dir + '/hls4ml_config.yml') as yfile:
-        ydata = yaml.safe_load(yfile)
+    #with open(output_dir + '/hls4ml_config.yml') as yfile:
+    #    ydata = yaml.safe_load(yfile)
+    #
+    #if not ydata['ProjectDir'] is None:
+    #    ProjectDir = ydata['ProjectDir']
+    #else:
+    #    ProjectDir = ydata['ProjectName'] + '_prj'
+    #ProjectName = ydata['ProjectName']
 
-    if not ydata['ProjectDir'] is None:
-        ProjectDir = ydata['ProjectDir']
-    else:
-        ProjectDir = ydata['ProjectName'] + '_prj'
-    ProjectName = ydata['ProjectName']
+    ProjectName = 'myproject'
+    ProjectDir = ProjectName + '_prj'
 
     sln_dir = output_dir + '/' + ProjectDir
     if not os.path.exists(sln_dir):
