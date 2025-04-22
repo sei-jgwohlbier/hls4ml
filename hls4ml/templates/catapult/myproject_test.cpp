@@ -20,7 +20,7 @@ const char *get_weights_dir() { return s_weights_dir.c_str(); }
 
 // hls-fpga-machine-learning insert bram
 
-#define CHECKPOINT 5000
+#define CHECKPOINT 1
 
 #ifndef RANDOM_FRAMES
 #define RANDOM_FRAMES 1
