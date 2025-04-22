@@ -34,6 +34,13 @@ class VitisBackend(VivadoBackend):
 
         self._default_flow = register_flow('ip', None, requires=ip_flow_requirements, backend=self.name)
 
+        # Register the fifo depth optimization flow which is different from the one for vivado
+        fifo_depth_opt_passes = [
+            'vitis:fifo_depth_optimization'
+        ] + writer_passes  # After optimization, a new project will be written
+
+        register_flow('fifo_depth_optimization', fifo_depth_opt_passes, requires=['vitis:ip'], backend=self.name)
+
     def create_initial_config(
         self,
         part='xcvu13p-flga2577-2-e',
@@ -43,6 +50,7 @@ class VitisBackend(VivadoBackend):
         namespace=None,
         write_weights_txt=True,
         write_tar=False,
+        tb_output_stream='both',
         **_,
     ):
         """Create initial configuration of the Vitis backend.
@@ -57,6 +65,8 @@ class VitisBackend(VivadoBackend):
             write_weights_txt (bool, optional): If True, writes weights to .txt files which speeds up compilation.
                 Defaults to True.
             write_tar (bool, optional): If True, compresses the output directory into a .tar.gz file. Defaults to False.
+            tb_output_stream (str, optional): Controls where to write the output. Options are 'stdout', 'file' and 'both'.
+                Defaults to 'both'.
 
         Returns:
             dict: initial configuration.
@@ -72,11 +82,23 @@ class VitisBackend(VivadoBackend):
             'Namespace': namespace,
             'WriteWeightsTxt': write_weights_txt,
             'WriteTar': write_tar,
+            'TBOutputStream': tb_output_stream,
         }
 
         return config
 
-    def build(self, model, reset=False, csim=True, synth=True, cosim=False, validation=False, export=False, vsynth=False):
+    def build(
+        self,
+        model,
+        reset=False,
+        csim=True,
+        synth=True,
+        cosim=False,
+        validation=False,
+        export=False,
+        vsynth=False,
+        fifo_opt=False,
+    ):
         if 'linux' in sys.platform:
             found = os.system('command -v vitis_hls > /dev/null')
             if found != 0:
@@ -87,8 +109,17 @@ class VitisBackend(VivadoBackend):
         os.system(
             (
                 'vitis_hls -f build_prj.tcl "reset={reset} csim={csim} synth={synth} cosim={cosim} '
-                'validation={validation} export={export} vsynth={vsynth}"'
-            ).format(reset=reset, csim=csim, synth=synth, cosim=cosim, validation=validation, export=export, vsynth=vsynth)
+                'validation={validation} export={export} vsynth={vsynth} fifo_opt={fifo_opt}"'
+            ).format(
+                reset=reset,
+                csim=csim,
+                synth=synth,
+                cosim=cosim,
+                validation=validation,
+                export=export,
+                vsynth=vsynth,
+                fifo_opt=fifo_opt,
+            )
         )
         os.chdir(curr_dir)
 
