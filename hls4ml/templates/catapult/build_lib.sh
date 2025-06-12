@@ -15,7 +15,12 @@ INCFLAGS="-I$MGC_HOME/shared/include -I$MGC_HOME/shared/include/nnet_utils -Ifir
 PROJECT=myproject
 LIB_STAMP=mystamp
 
+echo "CC=${CC}"
+echo "CFLAGS=${CFLAGS}"
+echo "INCFLAGS=${INCFLAGS}"
+
 ${CC} ${CFLAGS} ${INCFLAGS} -c firmware/${PROJECT}.cpp -o ${PROJECT}.o
 ${CC} ${CFLAGS} ${INCFLAGS} -c ${PROJECT}_bridge.cpp -o ${PROJECT}_bridge.o
 ${CC} ${CFLAGS} ${INCFLAGS} -shared ${PROJECT}.o ${PROJECT}_bridge.o -o firmware/${PROJECT}-${LIB_STAMP}.so
+${CC} ${CFLAGS} ${INCFLAGS} -o a.out ${PROJECT}_test.cpp firmware/${PROJECT}-${LIB_STAMP}.so
 rm -f *.o
