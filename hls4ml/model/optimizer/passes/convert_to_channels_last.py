@@ -93,10 +93,11 @@ class ChannelsLastConverter(OptimizerPass):
                 node.add_output_variable(shape, dims)
 
             # Have to transpose back before flattening to get correct order of elements in the flattened tensor
+            # jgw: change "off" to "internal"
             if (
                 isinstance(node, Reshape)
                 and len(node.attributes['target_shape']) == 1
-                and not model.config.config['HLSConfig']['Model']['ChannelsLastConversion'] == "off"
+                and not model.config.config['HLSConfig']['Model']['ChannelsLastConversion'] == "internal"
             ):
                 previous_node = node.get_input_node(node.inputs[0])
                 input = previous_node.name
